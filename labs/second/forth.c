@@ -44,7 +44,7 @@ void fifth() {
     scanf("%lf", &x);
     printf("y: ");
     scanf("%lf", &y);
-    printf("%.2lf\n", (x*y - 4*fabs(x+pow(E, x))/(pow(10, 6) + sqrt(log(y)))));
+    printf("%.2lf\n", (x*y - 4*fabs(x+pow(E, x)))/(pow(10, 6) + sqrt(log(y))));
 }
 
 void sixth() {
@@ -62,7 +62,7 @@ void seventh() {
     scanf("%lf", &x);
     printf("y: ");
     scanf("%lf", &y);
-    printf("%.2lf\n", tan(x/2)*atan(y));
+    printf("%.2lf\n", tan(x/3)*atan(y));
 }
 
 void eighth() {

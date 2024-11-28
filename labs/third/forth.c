@@ -1,18 +1,5 @@
 #include <stdio.h>
-
-int atoi(char *s) {
-    int res = 0;
-    int sign = 1;
-    if (s[0] == '-') {
-        sign = -1;
-        s++;
-    }
-    while (s[0] != '\0') {
-        res = res * 10 + s[0] - '0';
-        s++;
-    }
-    return sign*res;
-}
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {

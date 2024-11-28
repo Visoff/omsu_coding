@@ -1,1 +1,1 @@
-gcc -lstdc++ -lm $1 -o main && ./main && rm main
+gcc -lstdc++ -lm $1 -o main && ./main $@ && rm main

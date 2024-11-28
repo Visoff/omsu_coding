@@ -26,7 +26,7 @@ TriangleType triangle_type(Point A, Point B, Point C) {
     int max_side = max(max(a, b), c);
     int other_side1 = a == max_side ? b : a;
     int other_side2 = b == max_side ? c : a == max_side ? c : b;
-    int sq = other_side1*other_side1 + other_side2*other_side2 - max_side*max_side;
+    int sq = other_side1 + other_side2 - max_side;
     if (sq == 0) {
         return Right;
     }
