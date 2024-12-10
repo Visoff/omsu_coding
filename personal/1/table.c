@@ -93,6 +93,10 @@ void _draw_seperation_line(Table *table) {
 void _draw_section(size_t width, char *text, size_t len) {
     size_t gap = (width - len) / 2;
     if (gap < 0) {gap = 0;}
+    if (width < len) {
+        printf("%s", text);
+        return;
+    }
     for (int i = 0; i < gap; i++) {putchar(' ');}
     printf("%s", text);
     for (int i = 0; i < gap + (width - len) % 2; i++) {putchar(' ');}
@@ -184,6 +188,75 @@ void _draw_data_row(Table *table, double *arg) {
         }
         *arg += table->step;
     }
+}
+
+void prompt_for_change(Table *table) {
+    _clear_terminal();
+    printf("c(columns): %d\n", table->columns);
+    printf("r(ows): %d\n", table->rows);
+    printf("a(rgs)\n");
+    printf("f(unction)\n");
+    int c = getchar();
+    if (c == 'c') {
+        reset_terminal();
+        printf("columns: ");
+        int val;
+        scanf("%d", &val);
+        table->columns = val;
+        enable_raw_terminal();
+    } else if (c == 'r') {
+        reset_terminal();
+        printf("rows: ");
+        int val;
+        scanf("%d", &val);
+        table->rows = val;
+        enable_raw_terminal();
+    } else if (c == 'a') {
+        _clear_terminal();
+        printf("w(arg width): %d\n", table->arg_width);
+        printf("p(arg presision): %d\n", table->arg_presision);
+        c = getchar();
+        if (c == 'w') {
+            reset_terminal();
+            _clear_terminal();
+            printf("arg width: ");
+            int val;
+            scanf("%d", &val);
+            table->arg_width = val;
+            enable_raw_terminal();
+        } else if (c == 'p') {
+            reset_terminal();
+            _clear_terminal();
+            printf("arg presision: ");
+            int val;
+            scanf("%d", &val);
+            table->arg_presision = val;
+            enable_raw_terminal();
+        }
+    } else if (c == 'f') {
+        _clear_terminal();
+        printf("w(function width): %d\n", table->res_width);
+        printf("p(function resision): %d\n", table->res_presision);
+        c = getchar();
+        if (c == 'w') {
+            reset_terminal();
+            _clear_terminal();
+            printf("res width: ");
+            int val;
+            scanf("%d", &val);
+            table->res_width = val;
+            enable_raw_terminal();
+        } else if (c == 'p') {
+            reset_terminal();
+            _clear_terminal();
+            printf("res presision: ");
+            int val;
+            scanf("%d", &val);
+            table->res_presision = val;
+            enable_raw_terminal();
+        }
+    }
+    while ((c = getchar()) != '\n' && c != EOF) {}
 }
 
 void draw(Table *table) {

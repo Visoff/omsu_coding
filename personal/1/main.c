@@ -1,5 +1,6 @@
 #include "table.c"
 #include <math.h>
+#include <stdio.h>
 
 #define PI 3.1415926
 
@@ -7,8 +8,8 @@ const double arg_range_start = -3;
 const double arg_range_end = 2;
 const double arg_range_step = 0.04;
 
-const int columns = 3;
-const int rows = 10;
+const int columns = 5;
+const int rows = 20;
 
 const int arg_width = 15;
 const int arg_presision = 2;
@@ -49,11 +50,13 @@ int main() {
     table.flags = SCIENTIFIC_NOTATION;
 
     table.check_p = check_p;
-    while (1) {
+    _clear_terminal();
+    printf("Введите p: ");
+    int status = scanf("%lf", &table.p);
+    while (!status || !table.check_p(table.p)) {
         _clear_terminal();
         printf("Введите p: ");
-        scanf("%lf", &table.p);
-        if (table.check_p(table.p)) {break;}
+        status = scanf("%lf", &table.p);
     }
 
     enable_raw_terminal();
@@ -65,6 +68,7 @@ int main() {
     draw(&table);
     while ((c = getchar()) != EOF) {
         if (c == 'q' || c == '' || c == '') {break;}
+        if (c == 'b') {if (table.page > 0) table.page--;}
         if (c == 'e') {
             if (table.flags & SCIENTIFIC_NOTATION) {
                 table.flags &= ~SCIENTIFIC_NOTATION;
@@ -83,6 +87,10 @@ int main() {
             table.page++;
             if (table.start + table.step * table.page * table.rows * table.columns > table.end) {break;}
             draw(&table);
+            continue;
+        }
+        if (c == 'c') {
+            prompt_for_change(&table);
             continue;
         }
         draw(&table);

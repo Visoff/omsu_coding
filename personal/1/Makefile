@@ -1,7 +1,7 @@
 all: compile run clean
 
 compile:
-	gcc main.c -lm -o main
+	gcc main.c -O3 -lm -o main
 run:
 	./main
 clean:

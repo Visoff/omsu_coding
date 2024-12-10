@@ -1,0 +1,14 @@
+[dimensions]
+columns = 3
+rows = 10
+
+[arg]
+start = -3
+end = 2
+step = 0.04
+width = 15
+persision = 2
+
+[res]
+width = 15
+persision = 2
