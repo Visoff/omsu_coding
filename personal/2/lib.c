@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct {
     double **data;
@@ -111,12 +113,48 @@ void draw_table(Table *table) {
     for (int k = 0; k < table->cell_width; k++) {
         printf("━");
     }
-    for (size_t i = 1; i < table->rows; i++) {
+    for (size_t i = 1; i < table->cols; i++) {
         _draw_corner(Right, Middle);
         for (int k = 0; k < table->cell_width; k++) {
             printf("━");
         }
     }
     _draw_corner(Right, Right);
-    printf("\nPress \"r\" for random values and \"enter\" to continue\n");
+    printf("\nPress:\n");
+    printf("\"wasd\" to move\n");
+    printf("\"r\" for random values\n");
+    printf("\"c\" for configuration\n");
+    printf("\"l\" to load data into file\n");
+    printf("\"t\" to apply task\n");
+    printf("\"enter\" to continue\n");
 }
+
+struct _point {
+    int x;
+    int y;
+};
+
+void lab_task(Table *table) {
+    struct _point *negative = malloc(sizeof(struct _point)*table->rows*table->cols);
+    int len = 0;
+    for (int i = 0; i < table->rows; i++) {
+        for (int j = 0; j < table->cols; j++) {
+            if (table->data[i][j] < 0) {
+                negative[len].x = i;
+                negative[len].y = j;
+                len++;
+            }
+        }
+    }
+    for (int i = 0; i < table->rows; i++) {
+        for (int j = 0; j < len; j++) {
+            table->data[i][negative[j].y] = 0;
+        }
+    }
+    for (int j = 0; j < table->cols; j++) {
+        for (int i = 0; i < len; i++) {
+            table->data[negative[i].x][j] = 0;
+        }
+    }
+}
+

@@ -1,8 +1,11 @@
-all: compile run clean
+all: build run clean
 
-compile:
+build:
 	gcc main.c -o main
 run:
 	./main
 clean:
 	rm main
+
+test:
+	gcc test.c -o main && ./main && rm main
