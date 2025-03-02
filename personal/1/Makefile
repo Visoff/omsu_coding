@@ -1,15 +1,13 @@
-all: build run clean
+all: build_lib bin run clean
 
-build:
-	gcc -lstdc++ main.cpp -o main
+build_lib:
+	gcc -fpic -shared -o lib/lib.so lib/lib.c -Ilib
+
+bin:
+	gcc -o main main.c lib/lib.so
 
 run:
 	./main
 
 clean:
-	rm main
-
-build_test:
-	gcc -lstdc++ main.test.cpp -o main
-
-test: build_test run clean
+	rm main lib/lib.so
