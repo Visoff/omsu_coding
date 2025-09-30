@@ -1,11 +1,11 @@
 package lab2;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FinanceReport implements Iterable<Payment> {
+public class FinanceReport {
     private List<Payment> payments;
     private String fio;
     private Integer day, month, year;
@@ -16,16 +16,7 @@ public class FinanceReport implements Iterable<Payment> {
         this.day = day;
         this.month = month;
         this.year = year;
-        this.payments = new ArrayList<>();
-    }
-
-
-    public FinanceReport(List<Payment> payments, String fio, Integer day, Integer month, Integer year) {
-        this.fio = fio;
-        this.day = day;
-        this.month = month;
-        this.year = year;
-        this.payments = payments;
+        this.payments = Arrays.asList(payments);
     }
 
     public FinanceReport(FinanceReport paymentReport) {
@@ -66,10 +57,4 @@ public class FinanceReport implements Iterable<Payment> {
     public String getAuthor() {
         return fio;
     }
-
-
-	@Override
-	public Iterator<Payment> iterator() {
-        return payments.iterator();
-	}
 }

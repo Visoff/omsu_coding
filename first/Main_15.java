@@ -1,9 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Main_15 {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Vector3DArray vectors = new Vector3DArray(3);
+        vectors.set(0, new Vector3D(1, 2, 3));
+        vectors.set(1, new Vector3D(4, 5, 6));
+        vectors.set(2, new Vector3D(7, 8, 9));
+        System.out.println(vectors.sum());
+        System.out.println(vectors.maxLength());
+        System.out.println(vectors.find(new Vector3D(4, 5, 6)));
+        System.out.println(vectors.possibleShifts(new Point3D(1, -1, 5)));
+        System.out.println(vectors.sumWithCoefficients(List.of(1.0, 0.0, -1.0)));
     }
 }
 
@@ -33,6 +41,7 @@ class Point3D {
 	}
 
     public boolean equals(Object obj) {
+        if (this == obj) return true;
         if (!(obj instanceof Point3D)) {
             return false;
         }
@@ -60,6 +69,10 @@ class Point3D {
 }
 
 class Vector3D {
+    private double x;
+	private double y;
+    private double z;
+
     public double getX() {
 		return x;
 	}
@@ -78,10 +91,6 @@ class Vector3D {
 	public void setZ(double z) {
 		this.z = z;
 	}
-    private double x;
-	private double y;
-    private double z;
-
     public Vector3D() {
         this(0, 0, 0);
     }
@@ -109,6 +118,10 @@ class Vector3D {
         Vector3D other = (Vector3D) obj;
         return this.x == other.x && this.y == other.y && this.z == other.z;
     }
+
+    public String toString() {
+        return String.format("Vector3D(%f, %f, %f)", x, y, z);
+    }
 }
 
 class Vector3DProcessor {
@@ -132,8 +145,8 @@ class Vector3DProcessor {
         return new Vector3D(v1.getY() * v2.getZ() - v1.getZ() * v2.getY(), v1.getZ() * v2.getX() - v1.getX() * v2.getZ(), v1.getX() * v2.getY() - v1.getY() * v2.getX());
     }
 
-    public Boolean areColeinear(Vector3D v1, Vector3D v2) {
-        return dot(v1, v2) == 0;
+    public static Boolean areColeinear(Vector3D v1, Vector3D v2) {
+        return dot(v1, v2) != 0;
     }
 }
 

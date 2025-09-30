@@ -1,11 +1,8 @@
 package lab2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class StringProcessor {
     public static String repeat(String input, Integer n) throws IllegalArgumentException {
-        if (n < 0) throw new IllegalArgumentException();
+        if (input == null || n == null || n < 0) throw new IllegalArgumentException();
         String res = new String();
         for (int i = 0; i < n; i++) {
             res += input;
@@ -13,7 +10,8 @@ public class StringProcessor {
         return res;
     }
 
-    public static Integer count(String haystack, String needle) {
+    public static Integer count(String haystack, String needle) throws IllegalArgumentException {
+        if (haystack == null || needle == null) throw new IllegalArgumentException();
         int res = 0;
         for (int i = 0; i < haystack.length() - needle.length() + 1; i++) {
             if (haystack.substring(i, i + needle.length()).equals(needle)) {
@@ -24,6 +22,7 @@ public class StringProcessor {
     }
 
     public static String convertToNumberWords(String in) {
+        if (in == null) throw new IllegalArgumentException();
         String res = new String();
         for (char ch : in.toCharArray()) {
             switch (ch) {
@@ -44,18 +43,20 @@ public class StringProcessor {
         return res;
     }
 
-    public static void removeEvenCharacters(StringBuilder sb) {
+    public static void removeEvenCharacters(StringBuilder sb) throws IllegalArgumentException {
+        if (sb == null) throw new IllegalArgumentException();
         for (int i = sb.length()-1 - (sb.length() % 2); i >= 0; i -= 2) {
             sb.deleteCharAt(i);
         }
     }
 
     public static String reverseWords(String in) {
+        if (in == null) throw new IllegalArgumentException();
         char chars[] = in.toCharArray();
         String res = new String();
         int word_ptr = chars.length-1;
-        while (chars[word_ptr] == ' ') word_ptr--;
-        while (chars[word_ptr] != ' ') word_ptr--;
+        while (word_ptr >= 0 && chars[word_ptr] == ' ') word_ptr--;
+        while (word_ptr >= 0 && chars[word_ptr] != ' ') word_ptr--;
         word_ptr++;
         for (int i = 0; i < in.length(); i++) {
             if (chars[i] == ' ') {
@@ -76,10 +77,11 @@ public class StringProcessor {
     }
 
     public static String replaceAllHexToDecimal(String in) {
+        if (in == null) throw new IllegalArgumentException();
         char chars[] = in.toCharArray();
         String res = new String();
         for (int i = 0; i < chars.length; i++) {
-            if (i != chars.length-1 && chars[i] == '0' && chars[i+1] == 'x') {
+            if (i != chars.length-1 && chars[i] == '0' && chars[i+1] == 'x' && i+2 < chars.length && ('0' <= chars[i+2] && chars[i+2] <= '9' || 'a' <= chars[i+2] && chars[i+2] <= 'f' || 'A' <= chars[i+2] && chars[i+2] <= 'F')) {
                 Integer tmp = 0;
                 int j;
                 for (j = i+2; j < chars.length; j++) {
@@ -93,7 +95,7 @@ public class StringProcessor {
                         break;
                     }
                 }
-                res += tmp.toString();
+                res += Integer.toUnsignedString(tmp);
                 i = j-1;
                 continue;
             }

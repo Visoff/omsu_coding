@@ -10,8 +10,7 @@ public class FinanceReport implements Iterable<Payment> {
     private String fio;
     private Integer day, month, year;
 
-    public FinanceReport(Payment payments[], String fio, Integer day, Integer month, Integer year) throws IllegalArgumentException {
-        if (payments == null || fio == null || day == null || month == null || year == null) throw new IllegalArgumentException();
+    public FinanceReport(String fio, Integer day, Integer month, Integer year) {
         this.fio = fio;
         this.day = day;
         this.month = month;
@@ -33,10 +32,7 @@ public class FinanceReport implements Iterable<Payment> {
         this.day = paymentReport.day;
         this.month = paymentReport.month;
         this.year = paymentReport.year;
-        this.payments = new ArrayList<>();
-        for (Payment payment : paymentReport.payments) {
-            this.payments.add(new Payment(payment));
-        }
+        this.payments = new ArrayList<>(paymentReport.payments);
     }
 
     public Stream<Payment> stream() {
@@ -60,11 +56,7 @@ public class FinanceReport implements Iterable<Payment> {
     }
 
     public String toString() {
-        return String.format("[Автор: %s, дата: %d.%d.%d, Платежи: %s", fio, day, month, year, payments);
-    }
-
-    public String getAuthor() {
-        return fio;
+        return "[Автор: " + fio + ", дата: " + day + "." + month + "." + year + ", Платежи: " + payments + "]";
     }
 
 

@@ -5,15 +5,27 @@ public class Payment {
     private Integer day, month, year;
     private Double sum;
 
-    public Payment(String fio, Integer day, Integer month, Integer year, Double sum) {
+    public Payment(String fio, Integer day, Integer month, Integer year, Double sum) throws IllegalArgumentException {
+        if (fio == null || day == null || month == null || year == null || sum == null) throw new IllegalArgumentException();
         this.fio = fio;
-        this.day = day;
+        if (month < 1 || month > 12) throw new IllegalArgumentException();
         this.month = month;
+        if (day < 1 || day > 31) throw new IllegalArgumentException();
+        this.day = day;
         this.year = year;
+        if (sum < 0) throw new IllegalArgumentException();
         this.sum = sum;
     }
 
     public Payment() {}
+
+    public Payment(Payment p) {
+        this.fio = p.fio;
+        this.day = p.day;
+        this.month = p.month;
+        this.year = p.year;
+        this.sum = p.sum;
+    }
 
 	public String getFio() {
 		return fio;
@@ -55,6 +67,6 @@ public class Payment {
     }
 
     public String toString() {
-        return "Плательщик: " + fio + ", дата: " + day + "." + month + "." + year + ", сумма: " + (sum.intValue()) + " руб. " + Double.valueOf((sum * 100.0) % 100.0).intValue() + " коп.";
+        return String.format("Плательщик: %s, дата: %d.%d.%d, сумма: %d руб. %02d коп.", fio, day, month, year, sum.intValue(), Double.valueOf((sum * 100.0) % 100.0).intValue());
     }
 }
