@@ -10,6 +10,7 @@ public class StringProcessorTest {
         assertEquals("abab", StringProcessor.repeat("ab", 2));
         assertEquals("ababab", StringProcessor.repeat("ab", 3));
         assertEquals("", StringProcessor.repeat("a", 0));
+        assertEquals("", StringProcessor.repeat("", 10));
         assertThrows(IllegalArgumentException.class, () -> StringProcessor.repeat("a", -1));
         assertThrows(IllegalArgumentException.class, () -> StringProcessor.repeat("a", null));
         assertThrows(IllegalArgumentException.class, () -> StringProcessor.repeat(null, 0));
@@ -18,9 +19,10 @@ public class StringProcessorTest {
     @Test
     public void count() {
         assertEquals(2, StringProcessor.count("aa", "a"));
-        assertEquals(3, StringProcessor.count("aaa", "a"));
+        assertEquals(2, StringProcessor.count("aaa", "aa"));
         assertEquals(0, StringProcessor.count("aaa", "b"));
         assertEquals(1, StringProcessor.count("abaa", "ab"));
+        assertEquals(4, StringProcessor.count("ababababa", "aba"));
         assertThrows(IllegalArgumentException.class, () -> StringProcessor.count("a", null));
         assertThrows(IllegalArgumentException.class, () -> StringProcessor.count(null, "b"));
     }
@@ -43,6 +45,18 @@ public class StringProcessorTest {
         StringBuilder sb = new StringBuilder("hello12345678world");
         StringProcessor.removeEvenCharacters(sb);
         assertEquals("hlo2468ol", sb.toString());
+        sb = new StringBuilder("");
+        StringProcessor.removeEvenCharacters(sb);
+        assertEquals("", sb.toString());
+        sb = new StringBuilder("a");
+        StringProcessor.removeEvenCharacters(sb);
+        assertEquals("a", sb.toString());
+        sb = new StringBuilder("ab");
+        StringProcessor.removeEvenCharacters(sb);
+        assertEquals("a", sb.toString());
+        sb = new StringBuilder("abc");
+        StringProcessor.removeEvenCharacters(sb);
+        assertEquals("ac", sb.toString());
     }
 
     @Test
@@ -51,7 +65,7 @@ public class StringProcessorTest {
         assertEquals("  dd  cc bbb aaa", StringProcessor.reverseWords("  aaa  bbb cc dd"));
         assertEquals("", StringProcessor.reverseWords(""));
         assertEquals("bbb  aaa", StringProcessor.reverseWords("aaa  bbb"));
-        assertEquals("  world hello  ", StringProcessor.reverseWords("  hello world  "));
+        assertEquals("   world hello ", StringProcessor.reverseWords("   hello world "));
         assertEquals("hello", StringProcessor.reverseWords("hello"));
         assertEquals("  hello  ", StringProcessor.reverseWords("  hello  "));
         assertEquals("d c  b   a", StringProcessor.reverseWords("a b  c   d"));
@@ -80,11 +94,10 @@ public class StringProcessorTest {
         assertEquals("255", StringProcessor.replaceAllHexToDecimal("0x00FF"));
         assertEquals("4294967295", StringProcessor.replaceAllHexToDecimal("0xFFFFFFFF"));
         assertEquals("0", StringProcessor.replaceAllHexToDecimal("0x0"));
+        assertEquals("0b0", StringProcessor.replaceAllHexToDecimal("0b0"));
         assertEquals("0x and 0xG", StringProcessor.replaceAllHexToDecimal("0x and 0xG"));
-        //assertEquals("0xGHIJ and 0x12.34", StringProcessor.replaceAllHexToDecimal("0xGHIJ and 0x12.34"));
         assertEquals("Error code: 3735928559", StringProcessor.replaceAllHexToDecimal("Error code: 0xDEADBEEF"));
         assertEquals("16 32 48", StringProcessor.replaceAllHexToDecimal("0x10 0x20 0x30"));
-        //assertEquals("0x12_34", StringProcessor.replaceAllHexToDecimal("0x12_34"));
         assertThrows(IllegalArgumentException.class, () -> StringProcessor.replaceAllHexToDecimal(null));
     }
 }

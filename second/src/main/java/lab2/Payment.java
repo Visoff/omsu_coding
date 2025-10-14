@@ -1,55 +1,72 @@
 package lab2;
 
+import java.util.Objects;
+
 public class Payment {
     private String fio;
-    private Integer day, month, year;
+    private Date date;
     private Double sum;
 
-    public Payment(String fio, Integer day, Integer month, Integer year, Double sum) throws IllegalArgumentException {
-        if (fio == null || day == null || month == null || year == null || sum == null) throw new IllegalArgumentException();
+    public Payment
+    (String fio, Date date, Double sum)
+    throws IllegalArgumentException {
+        if (fio == null || fio.trim().isEmpty()) {
+            throw new IllegalArgumentException("Fio cannot be empty");
+        }
         this.fio = fio;
-        if (month < 1 || month > 12) throw new IllegalArgumentException();
-        this.month = month;
-        if (day < 1 || day > 31) throw new IllegalArgumentException();
-        this.day = day;
-        this.year = year;
-        if (sum < 0) throw new IllegalArgumentException();
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        this.date = date;
+        if (sum == null || sum < 0) {
+            throw new IllegalArgumentException("Sum cannot be null");
+        }
+        if (sum < 0) {
+            throw new IllegalArgumentException();
+        }
         this.sum = sum;
     }
 
-    public Payment() {}
+    public Payment() {
+    }
 
     public Payment(Payment p) {
         this.fio = p.fio;
-        this.day = p.day;
-        this.month = p.month;
-        this.year = p.year;
+        this.date = new Date(p.date);
         this.sum = p.sum;
     }
 
+    public boolean equals(Payment p) {
+        return fio.equals(p.fio) &&
+            Objects.equals(p.date, this.date) &&
+            sum.equals(p.sum);
+    }
+
+    public int hashCode() {
+        return fio.hashCode()+date.hashCode()+sum.hashCode();
+    }
+
+    public String toString() {
+        final double HUNDRED = 100;
+        return String.format(
+            "Плательщик: %s, дата: %s, сумма: %d руб. %02d коп.",
+            fio,
+            date,
+            sum.intValue(),
+            Double.valueOf((sum * HUNDRED) % HUNDRED).intValue());
+    }
+
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
 	public String getFio() {
 		return fio;
 	}
 	public void setFio(String fio) {
 		this.fio = fio;
-	}
-	public Integer getDay() {
-		return day;
-	}
-	public void setDay(Integer day) {
-		this.day = day;
-	}
-	public Integer getMonth() {
-		return month;
-	}
-	public void setMonth(Integer month) {
-		this.month = month;
-	}
-	public Integer getYear() {
-		return year;
-	}
-	public void setYear(Integer year) {
-		this.year = year;
 	}
 	public Double getSum() {
 		return sum;
@@ -58,15 +75,4 @@ public class Payment {
 		this.sum = sum;
 	}
 
-    public boolean equals(Payment p) {
-        return fio.equals(p.fio) && day.equals(p.day) && month.equals(p.month) && year.equals(p.year) && sum.equals(p.sum);
-    }
-
-    public int hashCode() {
-        return fio.hashCode() + day.hashCode() + month.hashCode() + year.hashCode() + sum.hashCode();
-    }
-
-    public String toString() {
-        return String.format("Плательщик: %s, дата: %d.%d.%d, сумма: %d руб. %02d коп.", fio, day, month, year, sum.intValue(), Double.valueOf((sum * 100.0) % 100.0).intValue());
-    }
 }

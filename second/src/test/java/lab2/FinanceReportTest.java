@@ -11,11 +11,11 @@ class FinanceReportTest {
     @BeforeEach
     void setUp() {
         payments = new Payment[] {
-            new Payment("Иванов Иван Иванович", 15, 12, 2023, 150.0),
-            new Payment("Петров Петр Петрович", 20, 12, 2023, 750.0),
-            new Payment("Сидоров Алексей Николаевич", 5, 1, 2024, 200000.0)
+            new Payment("Иванов Иван Иванович", new Date(15, 12, 2023), 150.0),
+            new Payment("Петров Петр Петрович", new Date(20, 12, 2023), 750.0),
+            new Payment("Сидоров Алексей Николаевич", new Date(5, 1, 2024), 200000.0)
         };
-        report = new FinanceReport(payments, "Смирнова Анна Владимировна", 25, 1, 2024);
+        report = new FinanceReport(payments, "Смирнова Анна Владимировна", new Date(25, 1, 2024));
     }
 
     @Test
@@ -28,7 +28,7 @@ class FinanceReportTest {
 
     @Test
     void testSetPayment() {
-        Payment newPayment = new Payment("Козлов Дмитрий Сергеевич", 10, 1, 2024, 100000.0);
+        Payment newPayment = new Payment("Козлов Дмитрий Сергеевич", new Date(10, 1, 2024), 100000.0);
         report.set(1, newPayment);
 
         assertTrue(newPayment.equals(report.get(1)));
@@ -43,7 +43,7 @@ class FinanceReportTest {
 
     @Test
     void testSetPayment_IndexOutOfBounds() {
-        Payment newPayment = new Payment("Test", 1, 1, 2023, 1000.0);
+        Payment newPayment = new Payment("Test", new Date(1, 1, 2023), 1000.0);
         assertThrows(IndexOutOfBoundsException.class, () -> report.set(-1, newPayment));
         assertThrows(IndexOutOfBoundsException.class, () -> report.set(3, newPayment));
     }
@@ -53,7 +53,7 @@ class FinanceReportTest {
         String result = report.toString();
 
         assertTrue(result.contains("Автор: Смирнова Анна Владимировна"));
-        assertTrue(result.contains("дата: 25.1.2024"));
+        assertTrue(result.contains("дата: 25.01.2024"));
         assertTrue(result.contains("Платежи:"));
         assertTrue(result.contains("Плательщик: Иванов Иван Иванович"));
         assertTrue(result.contains("дата: 15.12.2023, сумма: 150 руб. 00 коп."));
@@ -79,7 +79,7 @@ class FinanceReportTest {
 
     @Test
     void testEmptyPayments() {
-        FinanceReport emptyReport = new FinanceReport(new Payment[0], "Автор", 1, 1, 2023);
+        FinanceReport emptyReport = new FinanceReport(new Payment[0], "Автор", new Date(1, 1, 2023));
         assertEquals(0, emptyReport.length());
 
         String result = emptyReport.toString();
@@ -88,6 +88,9 @@ class FinanceReportTest {
 
     @Test
     void testNullPayments() {
-        assertThrows(IllegalArgumentException.class, () -> new FinanceReport(null, "Автор", 1, 1, 2023));
+        assertThrows(IllegalArgumentException.class, () -> new FinanceReport(null, "Автор", new Date(1, 1, 2023)));
+        assertThrows(IllegalArgumentException.class, () -> new FinanceReport(new Payment[] { null }, "Автор", new Date(1, 1, 2023)));
+        assertThrows(IllegalArgumentException.class, () -> new FinanceReport(new Payment[0], null, new Date(1, 1, 2023)));
+        assertThrows(IllegalArgumentException.class, () -> new FinanceReport(new Payment[0], "Автор", null));
     }
 }
