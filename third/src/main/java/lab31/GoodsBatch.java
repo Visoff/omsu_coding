@@ -2,7 +2,7 @@ package lab31;
 
 import java.util.Iterator;
 
-public class GoodsBatch implements Iterable<WrappedGoodsInterface> {
+public class GoodsBatch implements Iterable<WrappedGoodsInterface>, WrappedGoodsInterface {
     private String description;
     private WrappedGoodsInterface[] wrapped_goods;
 

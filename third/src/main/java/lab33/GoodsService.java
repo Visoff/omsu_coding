@@ -2,6 +2,7 @@ package lab33;
 
 import lab31.GoodsBatch;
 import lab31.GoodsWrapper;
+import lab31.PiecedGoods;
 import lab31.WrappedGoods;
 import lab31.WrappedGoodsInterface;
 import lab31.WrappedPiecedGoods;
@@ -36,19 +37,19 @@ public class GoodsService {
         return count;
     }
 
-    public static boolean checkAllWeighted(GoodsBatch batch) {
+    public static boolean checkAllWeightedGoods(GoodsBatch batch) {
         for (WrappedGoodsInterface wrappedGood : batch) {
             if (wrappedGood instanceof GoodsBatch) {
-                if (!checkAllWeighted((GoodsBatch) wrappedGood)) {
+                if (!checkAllWeightedGoods((GoodsBatch) wrappedGood)) {
                     return false;
                 }
             } else if (wrappedGood instanceof WrappedGoods) {
                 WrappedGoods wg = (WrappedGoods) wrappedGood;
-                if (!checkAllWeighted(new GoodsBatch("", wg.getWrapped_goods()))) {
+                if (!checkAllWeightedGoods(new GoodsBatch("", wg.getWrapped_goods()))) {
                     return false;
                 }
             } else if (
-                wrappedGood instanceof WrappedPiecedGoods || wrappedGood instanceof GoodsWrapper
+                wrappedGood instanceof WrappedPiecedGoods || wrappedGood instanceof PiecedGoods
             ) {
                 return false;
             }
