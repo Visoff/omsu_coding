@@ -8,13 +8,12 @@
   <name>ru.visoff</name>
   <url>http://maven.apache.org</url>
   <dependencyManagement>
-      <dependencies>
-          <dependency>
-              <groupId>org.junit</groupId>
-              <artifactId>junit-bom</artifactId>
-              <version>6.0.1</version>
-              <type>pom</type>
-              <scope>import</scope>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.9.2</version>
+            <scope>test</scope>
           </dependency>
       </dependencies>
   </dependencyManagement>
@@ -23,10 +22,10 @@
           <groupId>org.junit.jupiter</groupId>
           <artifactId>junit-jupiter</artifactId>
       </dependency>
-      <dependency>
-          <groupId>quadratic</groupId>
-          <artifactId>ru.visoff</artifactId>
-          <version>1.0-SNAPSHOT</version>
-      </dependency>
+          <dependency>
+              <groupId>ru.visoff</groupId>
+              <artifactId>lab3</artifactId>
+              <version>1.0-SNAPSHOT</version>
+          </dependency>
   </dependencies>
 </project>

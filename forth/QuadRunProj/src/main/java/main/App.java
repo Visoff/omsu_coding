@@ -2,10 +2,6 @@ package main;
 
 import quadratic.Quadratic;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args )
