@@ -50,4 +50,22 @@ public class GoodsBatch implements Iterable<WrappedGoodsInterface>, WrappedGoods
 	public Iterator<WrappedGoodsInterface> iterator() {
         return java.util.Arrays.asList(this.wrapped_goods).iterator();
 	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getName'");
+	}
+
+	@Override
+	public double getWeightNetto() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getWeightNetto'");
+	}
+
+	@Override
+	public double getWeightBrutto() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getWeightBrutto'");
+	}
 }

@@ -24,7 +24,7 @@ public class FunctionC implements SingleArgumentFunctionFromRangeInterface {
 	}
 
 	@Override
-	public double apply(double x) {
+	public double apply(double x) throws ArithmeticException {
         return (A * x + B) / (C * x + D);
 	}
 }

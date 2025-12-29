@@ -17,7 +17,6 @@ public class Quadratic {
     public double[] getRoots() {
         if (a == 0) {
             if (b == 0) {
-                // assume that infinite roots are impossible to represent with an array of roots
                 return new double[0];
             }
             return new double[]{-c / b};

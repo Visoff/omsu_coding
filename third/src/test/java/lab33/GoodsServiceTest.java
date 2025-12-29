@@ -33,8 +33,7 @@ public class GoodsServiceTest {
         GoodsWrapper deepestApple = new GoodsWrapper("Apple", 0.05);
         WrappedGoods middle = new WrappedGoods(new GoodsWrapper("MiddleBox", 0.1),
                 new WrappedGoodsInterface[] { deepestApple });
-        WrappedGoods outer = new WrappedGoods(new GoodsWrapper("OuterBox", 0.2),
-                new WrappedGoodsInterface[] { middle });
+        GoodsBatch outer = new GoodsBatch("OuterBox", new WrappedGoodsInterface[] { middle });
         GoodsBatch batch = new GoodsBatch("Deep", new WrappedGoodsInterface[] { outer });
 
         Filter appleFilter = new BeginStringFilter("Apple");
