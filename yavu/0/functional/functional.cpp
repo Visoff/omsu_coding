@@ -6,7 +6,7 @@
 double total_value(const BoxArray& boxes) {
     double total = 0;
     for (const auto& box : boxes) {
-        total += box.value;
+        total += box.get_value();
     }
     return total;
 }
@@ -14,7 +14,7 @@ double total_value(const BoxArray& boxes) {
 bool fits_in_dimensions(const BoxArray& boxes, double max_total_dimensions) {
     double total = 0;
     for (const auto& box : boxes) {
-        total += box.length + box.width + box.height;
+        total += box.get_length() + box.get_width() + box.get_height();
     }
     return total <= max_total_dimensions;
 }
@@ -22,9 +22,9 @@ bool fits_in_dimensions(const BoxArray& boxes, double max_total_dimensions) {
 double max_weight_with_volume_less_than(const BoxArray& boxes, int max_volume) {
     double max_weight = 0;
     for (const auto& box : boxes) {
-        int volume = box.length * box.width * box.height;
-        if (volume <= max_volume && box.weight > max_weight) {
-            max_weight = box.weight;
+        int volume = box.get_length() * box.get_width() * box.get_height();
+        if (volume <= max_volume && box.get_weight() > max_weight) {
+            max_weight = box.get_weight();
         }
     }
     return max_weight;
@@ -38,7 +38,7 @@ bool can_boxes_be_nested(const BoxArray& boxes) {
     std::sort(sorted_boxes.begin(), sorted_boxes.end(),
         [](const Box& a, const Box& b) {
             auto get_sorted_dims = [](const Box& box) {
-                std::array<int, 3> dims = {box.length, box.width, box.height};
+                std::array<int, 3> dims = {box.get_length(), box.get_width(), box.get_height()};
                 std::sort(dims.begin(), dims.end(), std::greater<int>());
                 return dims;
             };
@@ -54,7 +54,7 @@ bool can_boxes_be_nested(const BoxArray& boxes) {
         const Box& inner = sorted_boxes[i + 1];
         
         auto get_sorted_dims = [](const Box& box) {
-            std::array<int, 3> dims = {box.length, box.width, box.height};
+            std::array<int, 3> dims = {box.get_length(), box.get_width(), box.get_height()};
             std::sort(dims.begin(), dims.end());
             return dims;
         };

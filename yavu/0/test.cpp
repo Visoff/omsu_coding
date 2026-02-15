@@ -1,11 +1,13 @@
 #include "box/Box.hpp"
 #include "functional/functional.hpp"
+#include "container/container.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 
 // unity build
 #include "box/Box.cpp"
 #include "functional/functional.cpp"
+#include "container/container.cpp"
 
 class BoxTest : public ::testing::Test {
 protected:
@@ -25,11 +27,11 @@ TEST_F(BoxTest, ConstructorAndEquality) {
   EXPECT_FALSE(box1 == box3);
 
   Box defaultBox;
-  EXPECT_EQ(defaultBox.length, 0);
-  EXPECT_EQ(defaultBox.width, 0);
-  EXPECT_EQ(defaultBox.height, 0);
-  EXPECT_DOUBLE_EQ(defaultBox.weight, 0.0);
-  EXPECT_EQ(defaultBox.value, 0);
+  EXPECT_EQ(defaultBox.get_length(), 0);
+  EXPECT_EQ(defaultBox.get_width(), 0);
+  EXPECT_EQ(defaultBox.get_height(), 0);
+  EXPECT_DOUBLE_EQ(defaultBox.get_weight(), 0.0);
+  EXPECT_EQ(defaultBox.get_value(), 0);
 }
 
 TEST_F(BoxTest, StreamOperators) {
@@ -116,8 +118,129 @@ TEST(EdgeCasesTest, NegativeValues) {
   EXPECT_DOUBLE_EQ(max_weight_with_volume_less_than(boxes, 0), 0.0);
 }
 
+class ContainerTest : public ::testing::Test {
+protected:
+    ContainerTest() : c10(100, 100, 100, 50.0) {}
+
+    Container c10;
+    Box boxLight{10, 10, 10, 5.0, 100};
+    Box boxHeavy{20, 20, 20, 30.0, 200};
+    Box boxMedium{15, 15, 15, 15.0, 150};
+};
+
+TEST_F(ContainerTest, ConstructorAndEmpty) {
+    EXPECT_EQ(c10.get_length(), 100);
+    EXPECT_EQ(c10.get_width(), 100);
+    EXPECT_EQ(c10.get_height(), 100);
+    EXPECT_DOUBLE_EQ(c10.get_max_weight(), 50.0);
+    EXPECT_EQ(c10.count(), 0);
+    EXPECT_DOUBLE_EQ(c10.total_weight(), 0.0);
+    EXPECT_DOUBLE_EQ(c10.total_value(), 0.0);
+}
+
+TEST_F(ContainerTest, AddBoxWithoutIndex) {
+    int idx = c10.add_box(boxLight);
+    EXPECT_EQ(idx, 0);
+    EXPECT_EQ(c10.count(), 1);
+    EXPECT_DOUBLE_EQ(c10.total_weight(), 5.0);
+    EXPECT_DOUBLE_EQ(c10.total_value(), 100.0);
+
+    Box retrieved = c10.get_box(0);
+    EXPECT_EQ(retrieved, boxLight);
+
+    idx = c10.add_box(boxMedium);
+    EXPECT_EQ(idx, 1);
+    EXPECT_EQ(c10.count(), 2);
+    EXPECT_DOUBLE_EQ(c10.total_weight(), 20.0);
+    EXPECT_DOUBLE_EQ(c10.total_value(), 250.0);
+}
+
+TEST_F(ContainerTest, AddBoxWeightException) {
+    c10.add_box(boxHeavy);
+    EXPECT_THROW(c10.add_box(boxHeavy), DoesNotFitException);
+    EXPECT_EQ(c10.count(), 1);
+    EXPECT_DOUBLE_EQ(c10.total_weight(), 30.0);
+}
+
+TEST_F(ContainerTest, AddBoxAtIndex) {
+    c10.add_box(boxLight);
+    c10.add_box(boxHeavy);
+    c10.add_box(boxMedium, 0);
+    EXPECT_EQ(c10.count(), 3);
+    EXPECT_EQ(c10.get_box(0), boxMedium);
+    EXPECT_EQ(c10.get_box(1), boxLight);
+    EXPECT_EQ(c10.get_box(2), boxHeavy);
+}
+
+TEST_F(ContainerTest, RemoveBox) {
+    c10.add_box(boxLight);
+    c10.add_box(boxMedium);
+    c10.add_box(boxHeavy);
+
+    Box removed = c10.remove_box(1);
+    EXPECT_EQ(removed, boxMedium);
+    EXPECT_EQ(c10.count(), 2);
+    EXPECT_EQ(c10.get_box(0), boxLight);
+    EXPECT_EQ(c10.get_box(1), boxHeavy);
+}
+
+TEST_F(ContainerTest, TotalWeightAndValue) {
+    c10.add_box(boxLight);
+    c10.add_box(boxMedium);
+    c10.add_box(boxHeavy);
+    EXPECT_DOUBLE_EQ(c10.total_weight(), 5.0 + 15.0 + 30.0);
+    EXPECT_DOUBLE_EQ(c10.total_value(), 100.0 + 150.0 + 200.0);
+}
+
+TEST_F(ContainerTest, SubscriptOperator) {
+    c10.add_box(boxLight);
+    c10.add_box(boxMedium);
+
+    const Container& constRef = c10;
+    EXPECT_EQ(constRef[0], boxLight);
+    EXPECT_EQ(constRef[1], boxMedium);
+
+    c10[0] = boxHeavy;
+    EXPECT_EQ(c10.get_box(0), boxHeavy);
+    EXPECT_EQ(c10[0].get_value(), 200);
+
+    c10[1].set_value(999);
+    EXPECT_EQ(c10.get_box(1).get_value(), 999);
+}
+
+TEST_F(ContainerTest, StreamOperators) {
+    c10.add_box(boxLight);
+    c10.add_box(boxMedium);
+
+    std::stringstream ss;
+    ss << c10;
+
+    Container c2(0,0,0,0);
+    ss >> c2;
+
+    EXPECT_EQ(c2.get_length(), 100);
+    EXPECT_EQ(c2.get_width(), 100);
+    EXPECT_EQ(c2.get_height(), 100);
+    EXPECT_DOUBLE_EQ(c2.get_max_weight(), 50.0);
+    EXPECT_EQ(c2.count(), 2);
+    EXPECT_EQ(c2.get_box(0), boxLight);
+    EXPECT_EQ(c2.get_box(1), boxMedium);
+}
+
+TEST_F(ContainerTest, StreamEmpty) {
+    std::stringstream ss;
+    ss << c10;
+
+    Container c2(1,2,3,4.5);
+    ss >> c2;
+    EXPECT_EQ(c2.get_length(), 100);
+    EXPECT_EQ(c2.get_width(), 100);
+    EXPECT_EQ(c2.get_height(), 100);
+    EXPECT_DOUBLE_EQ(c2.get_max_weight(), 50.0);
+    EXPECT_EQ(c2.count(), 0);
+}
+
 int main() {
   ::testing::InitGoogleTest();
-  int _ = RUN_ALL_TESTS();
-  return 0;
+  return RUN_ALL_TESTS();
 }

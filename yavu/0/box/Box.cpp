@@ -22,3 +22,16 @@ std::istream &operator>>(std::istream &is, Box &box) {
   box.value = value;
   return is;
 }
+
+
+int Box::get_length() const { return length; }
+int Box::get_width() const { return width; }
+int Box::get_height() const { return height; }
+double Box::get_weight() const { return weight; }
+int Box::get_value() const { return value; }
+
+void Box::set_length(int length) { this->length = length; }
+void Box::set_width(int width) { this->width = width; }
+void Box::set_height(int height) { this->height = height; }
+void Box::set_weight(double weight) { this->weight = weight; }
+void Box::set_value(int value) { this->value = value; }
