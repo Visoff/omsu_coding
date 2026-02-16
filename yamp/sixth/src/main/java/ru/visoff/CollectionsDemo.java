@@ -14,13 +14,13 @@ public class CollectionsDemo {
 
     public static Collection<Human> selectNamesakes(Collection<Human> humans, Human human) {
         return humans.stream()
-                .filter(h -> h.getSurname().equals(human.getSurname()))
+                .filter(h -> h != human && h.getSurname().equals(human.getSurname()))
                 .collect(Collectors.toList());
     }
 
     public static Collection<Human> copyWithout(Collection<Human> humans, Human human) {
         return humans.stream()
-                .filter(h -> !h.equals(human))
+                .filter(h -> h != human)
                 .collect(Collectors.toList());
     }
 
@@ -64,18 +64,24 @@ public class CollectionsDemo {
     public static Set<Human> mapById(Map<Integer, Human> humans, Set<Integer> ids) {
         return ids.stream()
                 .map(humans::get)
+                .filter(h -> h != null)
                 .collect(Collectors.toSet());
     }
 
     public static Collection<Integer> selectAdults(Map<Integer, Human> humans) {
-        return humans.keySet().stream()
-                .filter(id -> humans.get(id).getAge() >= 18)
+        return humans.entrySet().stream()
+                .filter(e -> e.getValue() != null && e.getValue().getAge() >= 18)
+                .map(e -> e.getKey())
                 .collect(Collectors.toList());
     }
 
     public static Map<Integer, Integer> mapAges(Map<Integer, Human> humans) {
-        return humans.keySet().stream()
-                .collect(Collectors.toMap(id -> id, id -> humans.get(id).getAge()));
+        return humans.entrySet().stream()
+                .filter(e -> e.getValue() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().getAge()
+                ));
     }
 
     public static Map<Integer, List<Human>> mapByAge(Set<Human> humans) {

@@ -46,6 +46,6 @@ public class PhoneBook {
     public Map<Human, List<String>> findRecordsBySurnameBeginning(String prefix) {
         return phoneBook.entrySet().stream()
                 .filter(entry -> entry.getKey().getSurname().startsWith(prefix))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> new ArrayList<>(e.getValue())));
     }
 }
