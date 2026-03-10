@@ -6,7 +6,7 @@ public class Matrix implements IMatrix {
     private Double detCache = null;
     private boolean detCached = false;
 
-    public Matrix(int size) {
+    public Matrix(int size) throws IllegalArgumentException {
         this.size = size;
         if (size <= 0)
             throw new IllegalArgumentException("Размер матрицы должен быть положительным");
@@ -45,7 +45,6 @@ public class Matrix implements IMatrix {
         }
 
         double det = 1.0;
-        int swapCount = 0;
 
         for (int i = 0; i < size; i++) {
             int maxRow = i;
@@ -59,7 +58,6 @@ public class Matrix implements IMatrix {
                 double[] temp = matrix[i];
                 matrix[i] = matrix[maxRow];
                 matrix[maxRow] = temp;
-                swapCount++;
                 det *= -1;
             }
 
@@ -88,7 +86,7 @@ public class Matrix implements IMatrix {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        if (obj == null || !(obj instanceof Matrix))
             return false;
         Matrix matrix = (Matrix) obj;
         if (size != matrix.size)

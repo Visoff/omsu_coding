@@ -49,8 +49,6 @@ class MatrixComparatorTest {
         IMatrix[] matrices = { m2, m1, m3 };
         Arrays.sort(matrices, new MatrixComparator());
 
-        assertEquals(m1, matrices[0]);
-        assertEquals(m3, matrices[1]);
-        assertEquals(m2, matrices[2]);
+        assertArrayEquals(matrices, new IMatrix[]{m1, m3, m2});
     }
 }

@@ -30,9 +30,7 @@ public class DiagMatrix implements IMatrix {
     public void set(int i, int j, double value) {
         checkIndexes(i, j);
         if (i == j) {
-            if (data[i] != value) {
-                data[i] = value;
-            }
+            data[i] = value;
         } else if (Math.abs(value) > 1e-10) {
             throw new IllegalArgumentException(
                 String.format("Попытка записать ненулевое значение %.2f вне диагонали [%d, %d]", value, i, j)
