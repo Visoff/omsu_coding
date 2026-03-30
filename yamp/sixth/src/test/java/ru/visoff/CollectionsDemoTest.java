@@ -205,16 +205,13 @@ class CollectionsDemoTest {
         Map<Integer, Map<Character, List<Human>>> result =
                 CollectionsDemo.mapByAgeAndInitialSurnameLetter(humans);
 
-        // Build expected map
         Map<Integer, Map<Character, List<Human>>> expected = new HashMap<>();
 
-        // For age 30, group by first letter, lists sorted descending by FIO
         Map<Character, List<Human>> age30Map = new HashMap<>();
-        age30Map.put('A', Arrays.asList(a1, a2)); // "Antonov" before "Akimov"
+        age30Map.put('A', Arrays.asList(a1, a2));
         age30Map.put('B', Collections.singletonList(b1));
         expected.put(30, age30Map);
 
-        // For age 25
         Map<Character, List<Human>> age25Map = new HashMap<>();
         age25Map.put('C', Collections.singletonList(c1));
         expected.put(25, age25Map);

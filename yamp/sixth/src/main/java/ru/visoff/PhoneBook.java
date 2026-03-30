@@ -37,7 +37,7 @@ public class PhoneBook {
     public Human findHuman(String phone) {
         for (Map.Entry<Human, List<String>> entry : phoneBook.entrySet()) {
             if (entry.getValue().contains(phone)) {
-                return entry.getKey();
+                return entry.getKey(); // FIX: copy
             }
         }
         return null;
