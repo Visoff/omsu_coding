@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -81,14 +83,9 @@ public class GroupDataTest {
 
     @Test
     void dataIteratorIteratesAllNumbers() {
-        Iterator<Integer> it = data.iterator();
-        assertTrue(it.hasNext());
-        assertEquals(1, it.next());
-        assertEquals(2, it.next());
-        assertEquals(3, it.next());
-        assertEquals(4, it.next());
-        assertEquals(5, it.next());
-        assertFalse(it.hasNext());
+        List<Integer> actual = StreamSupport.stream(data.spliterator(), false)
+                .collect(Collectors.toList());
+        assertIterableEquals(Arrays.asList(1, 2, 3, 4, 5), actual);
     }
 
     @Test
@@ -109,14 +106,13 @@ public class GroupDataTest {
     @Test
     void dataDemoGetAll() {
         List<Integer> all = DataDemo.getAll(data);
-        assertEquals(5, all.size());
-        assertEquals(Arrays.asList(1, 2, 3, 4, 5), all);
+        assertIterableEquals(Arrays.asList(1, 2, 3, 4, 5), all);
     }
 
     @Test
     void dataDemoGetAllWithEmptyData() {
         Data empty = new Data("Empty");
         List<Integer> all = DataDemo.getAll(empty);
-        assertTrue(all.isEmpty());
+        assertIterableEquals(List.of(), all);
     }
 }

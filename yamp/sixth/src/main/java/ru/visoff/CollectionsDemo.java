@@ -5,7 +5,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class CollectionsDemo {
-
     public static long countStringsStartingWith(Collection<String> strs, char ch) {
         return strs.stream()
                 .filter(s -> s.startsWith(String.valueOf(ch)))
@@ -20,7 +19,7 @@ public class CollectionsDemo {
 
     public static Collection<Human> copyWithout(Collection<Human> humans, Human human) {
         return humans.stream()
-                .filter(h -> h != human)
+                .filter(h -> !h.equals(human))
                 .collect(Collectors.toList());
     }
 

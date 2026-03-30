@@ -28,9 +28,7 @@ public class PhoneBookTest {
         phoneBook.addPhone(ivanov, "12345");
         phoneBook.addPhone(ivanov, "67890");
         List<String> phones = phoneBook.getPhones(ivanov);
-        assertEquals(2, phones.size());
-        assertTrue(phones.contains("12345"));
-        assertTrue(phones.contains("67890"));
+        assertIterableEquals(List.of("12345", "67890"), phones);
     }
 
     @Test
@@ -40,12 +38,11 @@ public class PhoneBookTest {
         phoneBook.addPhone(petrov, "12345");
 
         phoneBook.deletePhone("12345");
-        assertFalse(phoneBook.getPhones(ivanov).contains("12345"));
-        assertTrue(phoneBook.getPhones(ivanov).contains("67890"));
+        assertIterableEquals(List.of("67890"), phoneBook.getPhones(ivanov));
         assertTrue(phoneBook.getPhones(petrov).isEmpty());
 
         phoneBook.deletePhone("99999");
-        assertEquals(1, phoneBook.getPhones(ivanov).size());
+        assertIterableEquals(List.of("67890"), phoneBook.getPhones(ivanov));
     }
 
     @Test
@@ -53,12 +50,11 @@ public class PhoneBookTest {
         assertTrue(phoneBook.getPhones(ivanov).isEmpty());
 
         phoneBook.addPhone(ivanov, "12345");
-        List<String> phones = phoneBook.getPhones(ivanov);
-        assertEquals(1, phones.size());
-        assertEquals("12345", phones.get(0));
+        assertIterableEquals(List.of("12345"), phoneBook.getPhones(ivanov));
 
+        List<String> phones = phoneBook.getPhones(ivanov);
         phones.add("hack");
-        assertEquals(1, phoneBook.getPhones(ivanov).size());
+        assertIterableEquals(List.of("12345"), phoneBook.getPhones(ivanov));
     }
 
     @Test
@@ -80,16 +76,16 @@ public class PhoneBookTest {
         phoneBook.addPhone(petrov, "222");
         phoneBook.addPhone(sidorov, "333");
 
-        Map<Human, List<String>> result = phoneBook.findRecordsBySurnameBeginning("Iva");
-        assertEquals(1, result.size());
-        assertTrue(result.containsKey(ivanov));
-        assertEquals(2, result.get(ivanov).size());
+        Map<Human, List<String>> expected = Map.of(ivanov, List.of("111", "112"));
 
-        result = phoneBook.findRecordsBySurnameBeginning("S");
-        assertEquals(1, result.size());
-        assertTrue(result.containsKey(sidorov));
+        Map<Human, List<String>> actual = phoneBook.findRecordsBySurnameBeginning("I");
+        assertEquals(expected, actual);
+    }
 
-        result = phoneBook.findRecordsBySurnameBeginning("X");
+    @Test
+    void findRecordsBySurnameBeginning_noMatches() {
+        phoneBook.addPhone(ivanov, "111");
+        Map<Human, List<String>> result = phoneBook.findRecordsBySurnameBeginning("X");
         assertTrue(result.isEmpty());
     }
 
@@ -99,7 +95,6 @@ public class PhoneBookTest {
         Map<Human, List<String>> result = phoneBook.findRecordsBySurnameBeginning("I");
         List<String> list = result.get(ivanov);
         list.add("modified");
-        assertEquals(1, phoneBook.getPhones(ivanov).size());
-        assertFalse(phoneBook.getPhones(ivanov).contains("modified"));
+        assertIterableEquals(List.of("111"), phoneBook.getPhones(ivanov));
     }
 }
