@@ -1,0 +1,5 @@
+BasedOnStyle: llvm
+indentWidth: 4
+UseTab: Never
+ColumnLimit: 80
+PointerAlignment: Right
