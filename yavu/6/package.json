@@ -1,0 +1,14 @@
+{
+  "name": "0",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+      "build:dev": "gcc -lstdc++ -std=c++23 -Wall -Wextra -Werror=all -fsanitize=address -g main.cpp -o main",
+      "build:prod": "gcc -lstdc++ -std=c++23 -Wall -Wextra -Werror=all -O3 main.cpp -o main",
+      "run": "npm run build:dev && ./main && rm main",
+      "test": "gcc -lstdc++ -std=c++23 -Wall -Wextra -Werror=all -fsanitize=address -lgtest -g test.cpp -o test && ./test && rm test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
