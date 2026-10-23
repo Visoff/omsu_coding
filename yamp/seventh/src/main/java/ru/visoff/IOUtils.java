@@ -11,7 +11,15 @@ import java.io.RandomAccessFile;
 import java.io.Reader;
 import java.io.Writer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class IOUtils {
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    public static String JSONSerialise(Sample s) throws JsonProcessingException {
+        return mapper.writeValueAsString(s);
+    }
 
     public static void writeIntArray(OutputStream out, int[] array) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(out)) {

@@ -3,12 +3,24 @@ package ru.visoff;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.io.*;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class IOUtilsTest {
+
+    @Test
+    void JSONSerialiseTest() throws JsonProcessingException {
+        Sample s = new Sample(1, "str", List.of("str1", "str2"));
+        String json = IOUtils.JSONSerialise(s);
+        assertTrue(json.contains("\"number\":1"));
+        assertTrue(json.contains("\"str\":\"str\""));
+        assertTrue(json.contains("\"strs\":[\"str1\",\"str2\"]"));
+    }
 
     @TempDir
     Path tempDir;

@@ -23,6 +23,18 @@ public class CollectionsDemo {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Task 3 (deep-copy variant): returns a copy of the input list not containing
+     * the given person. The resulting elements are independent copies:
+     * mutating elements of the input list must NOT affect the output list.
+     */
+    public static Collection<Human> copyWithoutIndependent(Collection<Human> humans, Human human) {
+        return humans.stream()
+                .filter(h -> !h.equals(human))
+                .map(h -> new Human(h.getSurname(), h.getName(), h.getPatronymic(), h.getAge()))
+                .collect(Collectors.toList());
+    }
+
     private static boolean areSetsIntersecting(Set<Integer> set1, Set<Integer> set2) {
         return set1.stream().anyMatch(set2::contains);
     }

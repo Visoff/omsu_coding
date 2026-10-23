@@ -1,13 +1,10 @@
 package ru.visoff;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class FileUtils {
-
     public static List<File> listFilesWithExtension(File directory, String extension) {
         if (directory == null) {
             throw new NullPointerException("Directory can't be null");
@@ -19,9 +16,9 @@ public class FileUtils {
             throw new NullPointerException("Extension can't be null");
         }
         String ext = extension.startsWith(".") ? extension : "." + extension;
-        FilenameFilter filter = (dir, name) -> name.toLowerCase().endsWith(ext.toLowerCase());
 
-        File[] files = directory.listFiles(filter);
+        File[] files = directory.listFiles(
+                (dir, name) -> name.toLowerCase().endsWith(ext.toLowerCase()));
         List<File> result = new ArrayList<>();
         if (files != null) {
             for (File f : files) {
@@ -40,24 +37,23 @@ public class FileUtils {
         if (regex == null) {
             throw new NullPointerException("Regex can't be null");
         }
-        Pattern pattern = Pattern.compile(regex);
         List<File> result = new ArrayList<>();
-        collectMatching(root, pattern, result);
+        collectMatching(root, regex, result);
         return result;
     }
 
-    private static void collectMatching(File file, Pattern pattern, List<File> result) {
+    private static void collectMatching(File file, String regex, List<File> result) {
         if (file == null || !file.exists()) {
             return;
         }
-        if (pattern.matcher(file.getName()).matches()) {
+        if (file.getName().matches(regex)) {
             result.add(file.getAbsoluteFile());
         }
         if (file.isDirectory()) {
             File[] children = file.listFiles();
             if (children != null) {
                 for (File child : children) {
-                    collectMatching(child, pattern, result);
+                    collectMatching(child, regex, result);
                 }
             }
         }

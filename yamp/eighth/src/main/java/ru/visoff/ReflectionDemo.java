@@ -1,10 +1,23 @@
 package ru.visoff;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class ReflectionDemo {
+    public static boolean hasSuperImplementingInitInterface(Object obj) {
+        return Arrays.stream(obj.getClass().getInterfaces()).anyMatch(
+                (Class<?> cls) -> {
+                    try {
+                        cls.getMethod("init");
+                        return true;
+                    } catch (NoSuchMethodException e) {
+                        return false;
+                    }
+                });
+    }
+
     public static long findHumanCount(List<Object> pool) {
         return pool.stream().filter(obj -> obj instanceof Human).count();
     }
@@ -13,14 +26,18 @@ public class ReflectionDemo {
         return List.of(obj.getClass().getFields()).stream().map(f -> f.getName()).toList();
     }
 
+    public static List<String> getPublicMethodNames(Object obj) {
+        return List.of(obj.getClass().getMethods()).stream().map(Method::getName).toList();
+    }
+
     public static List<String> getAllSuperClassNames(Object obj) {
         List<String> result = new java.util.ArrayList<>();
-        Class<?> clazz = obj.getClass();
-        while (clazz != Object.class) {
-            result.add(clazz.getName());
-            clazz = clazz.getSuperclass();
+        Class<?> curr = obj.getClass();
+        while (curr != Object.class) {
+            result.add(curr.getName());
+            curr = curr.getSuperclass();
         }
-        result.add(clazz.getName());
+        result.add(curr.getName());
         return result;
     }
 
@@ -33,10 +50,12 @@ public class ReflectionDemo {
 
     public static List<String> getGettersAndSetters(Object obj) {
         List<Method> fields = List.of(obj.getClass().getMethods());
-        Predicate<Method> getterCond = f -> f.getReturnType() != void.class && f.getParameterCount() == 0;
-        Predicate<Method> setterCond = f -> f.getReturnType() == void.class && f.getParameterCount() == 1;
+        Predicate<Method> getterCond = f -> f.getReturnType() != void.class && f.getParameterCount() == 0
+                && f.getName().startsWith("get");
+        Predicate<Method> setterCond = f -> f.getReturnType() == void.class && f.getParameterCount() == 1
+                && f.getName().startsWith("set");
         return fields.stream()
                 .filter(getterCond.or(setterCond))
-                .map(Method::getName).filter(s -> s.startsWith("get") || s.startsWith("set")).toList();
+                .map(Method::getName).toList();
     }
 }

@@ -3,7 +3,6 @@ package ru.visoff;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ public class ReflectionDemoTest {
     void findHumanCountShouldCountHumanAndSubtypes() {
         List<Object> pool = new ArrayList<>();
         pool.add(new Human());
-        pool.add(new Student()); // Student extends Human
+        pool.add(new Student());
         pool.add("Not a human");
         pool.add(new Object());
 
@@ -80,7 +79,6 @@ public class ReflectionDemoTest {
         assertTrue(result.contains("setValue"));
     }
 
-    // Helper classes for tests
     static class Student extends Human {}
 
     static class RunnableExecutable implements Executable {

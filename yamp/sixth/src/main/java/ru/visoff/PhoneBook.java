@@ -48,4 +48,21 @@ public class PhoneBook {
                 .filter(entry -> entry.getKey().getSurname().startsWith(prefix))
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> new ArrayList<>(e.getValue())));
     }
+
+    /**
+     * Task 12 spec names — delegate to the existing implementations so the
+     * required API surface (removePhone, findPersonByPhone, findBySurnamePrefix)
+     * is available.
+     */
+    public void removePhone(String phone) {
+        deletePhone(phone);
+    }
+
+    public Human findPersonByPhone(String phone) {
+        return findHuman(phone);
+    }
+
+    public Map<Human, List<String>> findBySurnamePrefix(String prefix) {
+        return findRecordsBySurnameBeginning(prefix);
+    }
 }
